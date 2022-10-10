@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<launch>
+
+<!-- arg name="localization_type" default="FIXED_ODOM"/-->
+    <!-- Possible variants
+        FIXED_ODOM   
+        AMCL
+        GMAPPING
+    -->
+	
+	<!-- arg name="map" default="nothing"/-->
+  <!-- send fake joint values -->
+<!-- node if="$(eval localization_type == 'FIXED_ODOM')" pkg="tf" type="static_transform_publisher" name="static_odom_broadcaster"
+        args="0 0 0 0 0 0 map odom 100">
+  </node -->
+
+  <param name="robot_description" command="$(find xacro)/xacro '$(find mobile_robot_gazebo)/urdf/main.xacro'"/>
+
+<node 
+		name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" 
+		type="joint_state_publisher_gui" output="screen"/>
+	
+  <!-- Combine joint values -->
+ 
+<node 
+		name="robot_state_publisher" pkg="robot_state_publisher" 
+		type="robot_state_publisher" output="screen"/>
+
+  <!-- Show in Rviz   -->
+  <node 
+		name="rviz" pkg="rviz" type="rviz" required="true"
+		args="-d $(find mobile_robot_gazebo)/config/config.rviz"/>
+
+</launch>
