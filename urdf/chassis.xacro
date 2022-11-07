@@ -2,7 +2,7 @@
 <robot name="robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!-- base link with castor wheel --> 
-<link name="link_chassis">
+<link name="base_link">
     <inertial>
       <mass value="5"/>
       <origin rpy="0 0 0" xyz="0 0 0.1"/>
@@ -49,7 +49,7 @@
   <!-- sensor joint-->
   <joint name="joint_sensor_laser" type="fixed">
     <origin xyz="0.25 0 0.1" rpy="0 0 0"/>
-    <parent link="link_chassis"/>
+    <parent link="base_link"/>
     <child link="sensor_laser"/>
   </joint>
   <!-- sensor link-->
