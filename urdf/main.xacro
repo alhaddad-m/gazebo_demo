@@ -4,14 +4,14 @@
   <xacro:include filename="$(find mobile_robot_gazebo)/urdf/materials.xacro" />
   <xacro:include filename="$(find mobile_robot_gazebo)/urdf/macros.xacro" />
   <!-- dummy link -->
-<link name="root_link">
+<link name="base_footprint">
 	<origin xyz="0 0 0" rpy="0 0 0"/>
 </link>
 
 <!-- dummy joint -->
 <joint name="root_joint" type="fixed">
-	<parent link="root_link"/>
-	<child  link="link_chassis"/>
+	<parent link="base_footprint"/>
+	<child  link="base_link"/>
 	<origin xyz="0 0 0" rpy="0 0 0"/>
 </joint>
 <!-- import robot -->
@@ -21,7 +21,7 @@
 
 <!-- gazebo -->
    <!-- gazebo coloring -->
-<gazebo reference="link_chassis">
+<gazebo reference="base_link">
     <material>Gazebo/Red</material>
   </gazebo>
 
@@ -29,7 +29,7 @@
   <gazebo>
     <plugin filename="libgazebo_ros_diff_drive.so" name="differential_drive_controller">
       <alwaysOn>true</alwaysOn>
-      <updateRate>20</updateRate>
+      <updateRate>10</updateRate>
       <leftJoint>joint_left_wheel</leftJoint>
       <rightJoint>joint_right_wheel</rightJoint>
       <wheelSeparation>0.4</wheelSeparation>
@@ -38,7 +38,7 @@
       <commandTopic>cmd_vel</commandTopic>
       <odometryTopic>odom</odometryTopic>
       <odometryFrame>odom</odometryFrame>
-      <robotBaseFrame>root_link</robotBaseFrame>
+      <robotBaseFrame>base_footprint</robotBaseFrame>
       <publishTf>1</publishTf>
       <publishOdomTf>true</publishOdomTf>
       <publishWheelTF>false</publishWheelTF>
@@ -48,5 +48,37 @@
     </plugin>
   </gazebo>
 
+<!-- laser sensor plugin -->
+<gazebo reference="sensor_laser">
+	<sensor type="ray" name="head_hokuyo_sensor">
+		<pose>0 0 0 0 0 0</pose>
+		<visualize>true</visualize>
+		<update_rate>10</update_rate>
+		<ray>
+        <scan>
+			<horizontal>
+				<samples>720</samples>
+				<resolution>1</resolution>
+				<min_angle>-3.0</min_angle>
+				<max_angle>3.0</max_angle>
+			</horizontal>
+		</scan>
+		<range>
+			<min>0.10</min>
+			<max>10.0</max>
+			<resolution>0.01</resolution>
+		</range>
+        <noise>
+			<type>gaussian</type>
+			<mean>0.0</mean>
+			<stddev>0.01</stddev>
+        </noise>
+		</ray>
+		<plugin name="gazebo_ros_head_hokuyo_controller" filename="libgazebo_ros_laser.so">
+			<topicName>/scan</topicName>
+			<frameName>sensor_laser</frameName>
+		</plugin>
+	</sensor>
+</gazebo>
 
 </robot>
