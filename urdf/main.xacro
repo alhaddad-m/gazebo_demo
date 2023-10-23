@@ -5,7 +5,6 @@
   <xacro:include filename="$(find mobile_robot_gazebo)/urdf/macros.xacro" />
   <!-- dummy link -->
 <link name="base_footprint">
-	<origin xyz="0 0 0" rpy="0 0 0"/>
 </link>
 
 <!-- dummy joint -->
