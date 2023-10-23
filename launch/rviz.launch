@@ -1,27 +1,17 @@
 <?xml version="1.0"?>
 <launch>
 
-<!-- arg name="localization_type" default="FIXED_ODOM"/-->
-    <!-- Possible variants
-        FIXED_ODOM   
-        AMCL
-        GMAPPING
-    -->
-	
-	<!-- arg name="map" default="nothing"/-->
-  <!-- send fake joint values -->
-<!-- node if="$(eval localization_type == 'FIXED_ODOM')" pkg="tf" type="static_transform_publisher" name="static_odom_broadcaster"
-        args="0 0 0 0 0 0 map odom 100">
-  </node -->
 
+  <!-- upload urdf -->
   <param name="robot_description" command="$(find xacro)/xacro '$(find mobile_robot_gazebo)/urdf/main.xacro'"/>
 
+<!-- setting and publishing joint state values for the given URDF -->
 <node 
 		name="joint_state_publisher_gui" pkg="joint_state_publisher_gui" 
 		type="joint_state_publisher_gui" output="screen"/>
 	
-  <!-- Combine joint values -->
- 
+  
+ <!-- Publish the state of a robot to tf. -->
 <node 
 		name="robot_state_publisher" pkg="robot_state_publisher" 
 		type="robot_state_publisher" output="screen"/>
